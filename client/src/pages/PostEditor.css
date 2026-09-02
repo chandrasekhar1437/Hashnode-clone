@@ -1,0 +1,121 @@
+.post-editor-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.post-editor-container h2 {
+  font-size: 1.8rem;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.error-banner {
+  background: #ffebee;
+  color: #c62828;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  border-left: 4px solid #c62828;
+}
+
+.post-editor-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.post-editor-form label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #333333;
+  margin-bottom: -0.4rem;
+}
+
+.post-editor-form input[type="text"],
+.post-editor-form textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #1f2937;
+  background-color: #f9fafb;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.post-editor-form input[type="text"]:focus,
+.post-editor-form textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.post-editor-form input[type="file"] {
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+.image-preview-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+  background: #f3f4f6;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.cover-preview {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+}
+
+.remove-img-btn {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.remove-img-btn:hover {
+  background-color: #fecaca;
+}
+
+.submit-post-btn {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.9rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  margin-top: 1rem;
+}
+
+.submit-post-btn:hover {
+  background-color: #1d4ed8;
+}
+
+.submit-post-btn:active {
+  transform: scale(0.99);
+}

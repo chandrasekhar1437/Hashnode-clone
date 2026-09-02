@@ -1,0 +1,85 @@
+:root {
+  --bg-color: #121212;
+  --text-color: #ffffff;
+  --nav-bg: #1a1a1a;
+  --link-color: #ccc;
+}
+
+[data-theme='light'] {
+  --bg-color: #f9f9f9;
+  --text-color: #2d3748;
+  --nav-bg: #ffffff;
+  --link-color: #4a5568;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar {
+  padding: 1rem 2rem;
+  background-color: var(--nav-bg) !important;
+  color: var(--text-color) !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.25rem;
+  text-decoration: none;
+  color: var(--text-color) !important;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.navbar-links a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.navbar-links a:hover {
+  color: var(--text-color);
+}
+
+.navbar-links a.active {
+  font-weight: bold;
+  border-bottom: 2px solid #3182ce;
+  padding-bottom: 2px;
+  color: var(--text-color) !important;
+}
+
+.logout-btn {
+  background: #e53e3e;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.register-btn {
+  background: #3182ce;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.theme-toggle-btn {
+  background: transparent;
+  border: 1px solid var(--link-color);
+  color: var(--text-color);
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
