@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-// 1. Configure Nodemailer Transporter
+// 1. Create Nodemailer Transporter using environment variables
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -9,19 +9,19 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Helper function to send email via Nodemailer
+// Helper to send email
 const sendOTPEmail = async (email, otp) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
     subject: 'Your Account Verification OTP',
-    text: `Your OTP for verification is: ${otp}. It will expire shortly.`,
+    text: `Your OTP for verification is: ${otp}`,
   };
 
   await transporter.sendMail(mailOptions);
 };
 
-// 2. Controller methods (Update existing logic with sendOTPEmail calls)
+// 2. Route Controller Handlers
 exports.sendOtp = async (req, res) => {
   try {
     const { email } = req.body;
@@ -29,18 +29,21 @@ exports.sendOtp = async (req, res) => {
       return res.status(400).json({ message: 'Email is required' });
     }
 
-    // Generate a 6-digit OTP
+    // Generate 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // TODO: Save OTP to your database (e.g., User or OTP model) with an expiration timestamp
-
-    // Send real email via Gmail
+    // Send email via Gmail
     await sendOTPEmail(email, otp);
 
-    return res.status(200).json({ message: 'OTP sent to email successfully!' });
+    // Return success without attaching the OTP to the response message
+    return res.status(200).json({
+      message: 'OTP sent successfully! Please check your Gmail inbox.',
+    });
   } catch (error) {
     console.error('Nodemailer Error:', error);
-    return res.status(500).json({ message: 'Failed to send OTP email. Please try again.' });
+    return res.status(500).json({
+      message: 'Failed to send OTP email. Please verify environment variables on Render.',
+    });
   }
 };
 
@@ -48,8 +51,6 @@ exports.verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
 
-    // TODO: Verify OTP against saved record in DB
-    // Example placeholder validation:
     if (!email || !otp) {
       return res.status(400).json({ message: 'Email and OTP are required' });
     }
