@@ -1,80 +1,62 @@
-const User = require('../models/user');
-const bcrypt = require('bcryptjs');
-const generateToken = require('../utils/generateToken');
+const nodemailer = require('nodemailer');
 
-// @desc    Register a new user
-// @route   POST /api/auth/register
-// @access  Public
-const registerUser = async (req, res) => {
+// 1. Configure Nodemailer Transporter
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+// Helper function to send email via Nodemailer
+const sendOTPEmail = async (email, otp) => {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: 'Your Account Verification OTP',
+    text: `Your OTP for verification is: ${otp}. It will expire shortly.`,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+// 2. Controller methods (Update existing logic with sendOTPEmail calls)
+exports.sendOtp = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
-
-    const userExists = await User.findOne({ email });
-    if (userExists) {
-      return res.status(400).json({ message: 'User already exists' });
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    // Generate a 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-    const user = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-    });
+    // TODO: Save OTP to your database (e.g., User or OTP model) with an expiration timestamp
 
-    if (user) {
-      res.status(201).json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        bio: user.bio,
-        avatarUrl: user.avatarUrl,
-        token: generateToken(user._id),
-      });
-    } else {
-      res.status(400).json({ message: 'Invalid user data' });
-    }
+    // Send real email via Gmail
+    await sendOTPEmail(email, otp);
+
+    return res.status(200).json({ message: 'OTP sent to email successfully!' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Nodemailer Error:', error);
+    return res.status(500).json({ message: 'Failed to send OTP email. Please try again.' });
   }
 };
 
-// @desc    Authenticate user & get token
-// @route   POST /api/auth/login
-// @access  Public
-const loginUser = async (req, res) => {
+exports.verifyOtp = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, otp } = req.body;
 
-    const user = await User.findOne({ email });
-
-    if (user && (await bcrypt.compare(password, user.password))) {
-      res.json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        bio: user.bio,
-        avatarUrl: user.avatarUrl,
-        token: generateToken(user._id),
-      });
-    } else {
-      res.status(401).json({ message: 'Invalid email or password' });
+    // TODO: Verify OTP against saved record in DB
+    // Example placeholder validation:
+    if (!email || !otp) {
+      return res.status(400).json({ message: 'Email and OTP are required' });
     }
+
+    return res.status(200).json({ message: 'OTP verified successfully!' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Verification Error:', error);
+    return res.status(500).json({ message: 'OTP verification failed' });
   }
 };
-
-// @desc    Get user profile
-// @route   GET /api/auth/me
-// @access  Protected
-const getMe = async (req, res) => {
-  try {
-    res.json(req.user);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-module.exports = { registerUser, loginUser, getMe };
